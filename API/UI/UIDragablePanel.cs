@@ -28,8 +28,8 @@ namespace AARPG.API.UI{
 			header.SetPadding(0);
 			header.Height.Set(30, 0f);
 			header.BackgroundColor.A = 255;
-			header.OnMouseDown += Header_MouseDown;
-			header.OnMouseUp += Header_MouseUp;
+			header.OnLeftMouseDown += Header_MouseDown;
+			header.OnLeftMouseUp += Header_MouseUp;
 			Append(header);
 
 			var heading = new UIText(headerText, 0.9f){
@@ -43,7 +43,7 @@ namespace AARPG.API.UI{
 			closeButton.Width.Set(40, 0);
 			closeButton.Left.Set(-40, 1);
 			closeButton.BackgroundColor.A = 255;
-			closeButton.OnClick += (evt, element) => OnMenuClose?.Invoke();
+			closeButton.OnLeftClick += (evt, element) => OnMenuClose?.Invoke();
 			header.Append(closeButton);
 		}
 
@@ -58,14 +58,14 @@ namespace AARPG.API.UI{
 		}
 
 		public void Header_MouseDown(UIMouseEvent evt, UIElement element){
-			base.MouseDown(evt);
+			base.LeftMouseDown(evt);
 
 			Offset = new Vector2(evt.MousePosition.X - Left.Pixels, evt.MousePosition.Y - Top.Pixels);
 			Dragging = true;
 		}
 
 		public void Header_MouseUp(UIMouseEvent evt, UIElement element){
-			base.MouseUp(evt);
+			base.LeftMouseUp(evt);
 
 			//A child element forced this to not move
 			if(!Dragging)

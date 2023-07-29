@@ -98,8 +98,8 @@ namespace AARPG.API.UI{
 			DrawHandle(spriteBatch, handleRectangle);
 		}
 
-		public override void MouseDown(UIMouseEvent evt){
-			base.MouseDown(evt);
+		public override void LeftMouseDown(UIMouseEvent evt){
+			base.LeftMouseDown(evt);
 			if(evt.Target == this){
 				Rectangle handleRectangle = GetHandleRectangle();
 				if(handleRectangle.Contains(new Point((int)evt.MousePosition.X, (int)evt.MousePosition.Y))){
@@ -113,8 +113,8 @@ namespace AARPG.API.UI{
 			}
 		}
 
-		public override void MouseUp(UIMouseEvent evt){
-			base.MouseUp(evt);
+		public override void LeftMouseUp(UIMouseEvent evt){
+			base.LeftMouseUp(evt);
 			isDragging = false;
 		}
 	}

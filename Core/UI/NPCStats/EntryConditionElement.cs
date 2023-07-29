@@ -35,7 +35,7 @@ namespace AARPG.Core.UI.NPCStats{
 			toggle.SetState(false);
 			toggle.Left.Set(text.Width.GetValue(Width.Pixels) + 8, 0);
 			toggle.Top.Set(6, 0);
-			toggle.OnClick += (evt, element) => {
+			toggle.OnLeftClick += (evt, element) => {
 				ConditionSet = !ConditionSet;
 				OnConditionToggle?.Invoke(ConditionSet);
 			};

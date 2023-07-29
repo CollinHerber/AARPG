@@ -100,15 +100,15 @@ namespace AARPG.Core.NPCs{
 			}
 		}
 
-		public override void ModifyHitByItem(NPC npc, Player player, Item item, ref int damage, ref float knockback, ref bool crit){
+		public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers){
 			ApplyEndurance(ref damage);
 		}
 
-		public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection){
+		public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers){
 			ApplyEndurance(ref damage);
 		}
 
-		public override void ModifyHitNPC(NPC npc, NPC target, ref int damage, ref float knockback, ref bool crit){
+		public override void ModifyHitNPC(NPC npc, NPC target, ref NPC.HitModifiers modifiers){
 			if(target.TryGetGlobalNPC<StatNPC>(out var statNPC))
 				statNPC.ApplyEndurance(ref damage);
 		}
