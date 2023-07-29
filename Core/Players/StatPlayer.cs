@@ -71,7 +71,9 @@ namespace AARPG.Core.Players
 		public override void PostUpdateMiscEffects()
 		{
 			stats.healthModifier.ApplyModifier(ref Player.statLifeMax2);
-			stats.defenseModifier.ApplyModifier(ref Player.statDefense);
+			//--NEEDS LOOKING--//
+			//-- Need to reenable once figuring out the new Player.DefenseStat object --//
+			//stats.defenseModifier.ApplyModifier(ref Player.statDefense);
 			stats.enduranceModifier.ApplyModifier(ref Player.endurance);
 		}
 

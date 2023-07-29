@@ -100,22 +100,42 @@ namespace AARPG.Core.NPCs{
 			}
 		}
 
-		public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers){
-			ApplyEndurance(ref damage);
+		public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
+		{
+			// ApplyEndurance(ref damage);
+			//-- TEMP SOLVE --//
+			//-- SEE https://github.com/tModLoader/tModLoader/blob/1.4.4/ExampleMod/Content/Items/Weapons/HitModifiersShowcase.cs#L123 --//
+			modifiers.ModifyHitInfo += (ref NPC.HitInfo hitInfo) => {
+				hitInfo.Damage = ApplyEndurance(hitInfo.Damage);
+			};
 		}
 
 		public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers){
-			ApplyEndurance(ref damage);
+			// ApplyEndurance(ref damage);
+			//-- TEMP SOLVE --//
+			//-- SEE https://github.com/tModLoader/tModLoader/blob/1.4.4/ExampleMod/Content/Items/Weapons/HitModifiersShowcase.cs#L123 --//
+			modifiers.ModifyHitInfo += (ref NPC.HitInfo hitInfo) => {
+				hitInfo.Damage = ApplyEndurance(hitInfo.Damage);
+			};
 		}
 
 		public override void ModifyHitNPC(NPC npc, NPC target, ref NPC.HitModifiers modifiers){
-			if(target.TryGetGlobalNPC<StatNPC>(out var statNPC))
-				statNPC.ApplyEndurance(ref damage);
+			/*
+			 * if(target.TryGetGlobalNPC<StatNPC>(out var statNPC))
+             *   statNPC.ApplyEndurance(ref damage);
+			 */
+			//-- TEMP SOLVE --//
+			//-- SEE https://github.com/tModLoader/tModLoader/blob/1.4.4/ExampleMod/Content/Items/Weapons/HitModifiersShowcase.cs#L123 --//
+			modifiers.ModifyHitInfo += (ref NPC.HitInfo hitInfo) => {
+				hitInfo.Damage = ApplyEndurance(hitInfo.Damage);
+			};
 		}
 
-		private void ApplyEndurance(ref int damage)
-			=> damage = Math.Max(1, (int)(damage * (1f - Math.Min(0.9999f, endurance))));
-
+		private int ApplyEndurance(int damage)
+		{
+			return Math.Max(1, (int)(damage * (1f - Math.Min(0.9999f, endurance))));	
+		}
+		
 		public override void OnKill(NPC npc){
 			if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null && !npc.SpawnedFromStatue){
 				for(int i = 0; i < Main.maxPlayers; i++){
