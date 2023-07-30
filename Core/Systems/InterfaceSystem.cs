@@ -70,6 +70,8 @@ namespace AARPG.Core.Systems {
 			if (!Main.gameMenu && characterPanel.visible) {
 				characterPanel.AddLevelText();
 				characterPanel.AddExperienceText();
+				characterPanel.AddPerkPointsText();
+				characterPanel.AddRefundPointsText();
 				uiInterface.Draw(Main.spriteBatch, new GameTime());	
 			}
 

@@ -100,19 +100,26 @@ namespace AARPG.Core.Mechanics{
 			}
 
 			if(lvlup){
-				CombatText.NewText(new Rectangle((int)statsOwner.Top.X - 30, (int)statsOwner.Top.Y - 35, 60, 20), CombatText.DamagedHostileCrit, "LEVEL UP!", dramatic: true);
-
-				int[] dustTypes = new int[]{ DustID.Confetti, DustID.Confetti_Blue, DustID.Confetti_Green, DustID.Confetti_Pink, DustID.Confetti_Yellow };
-				for(int i = 0; i < 80; i++){
-					Vector2 randVel = new Vector2(Main.rand.NextFloat(-5f, 5f), Main.rand.NextFloat(-6f, -0.25f));
-
-					Dust.NewDustPerfect(statsOwner.Center, Main.rand.Next(dustTypes), randVel, Scale: Main.rand.NextFloat(0.85f, 1.2f));
-				}
-
-				MiscUtils.SendMessage($"Player \"{statsOwner.name}\" has reached Lv. {level}!");
+				HandleLevelUp(statsOwner);
 			}
 			
 			InterfaceSystem.characterPanel.Refresh();
+		}
+
+		private void HandleLevelUp(Player statsOwner) {
+			CombatText.NewText(new Rectangle((int)statsOwner.Top.X - 30, (int)statsOwner.Top.Y - 35, 60, 20), CombatText.DamagedHostileCrit, "LEVEL UP!", dramatic: true);
+
+			int[] dustTypes = new int[]{ DustID.Confetti, DustID.Confetti_Blue, DustID.Confetti_Green, DustID.Confetti_Pink, DustID.Confetti_Yellow };
+			for(int i = 0; i < 80; i++){
+				Vector2 randVel = new Vector2(Main.rand.NextFloat(-5f, 5f), Main.rand.NextFloat(-6f, -0.25f));
+
+				Dust.NewDustPerfect(statsOwner.Center, Main.rand.Next(dustTypes), randVel, Scale: Main.rand.NextFloat(0.85f, 1.2f));
+			}
+
+			refundPoints += 1;
+			perkPoints += 1;
+
+			MiscUtils.SendMessage($"Player \"{statsOwner.name}\" has reached Lv. {level}!");
 		}
 
 		private void ApplyGenericLevelUpBoosts(){

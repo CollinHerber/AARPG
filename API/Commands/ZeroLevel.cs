@@ -1,5 +1,6 @@
 ﻿using AARPG.Core.Mechanics;
 using AARPG.Core.Players;
+using AARPG.Core.Systems;
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
@@ -22,7 +23,7 @@ namespace AARPG.API.Commands{
 
 			StatPlayer plr = caller.Player.GetModPlayer<StatPlayer>();
 			plr.stats = new PlayerStatistics();
-
+			InterfaceSystem.characterPanel.Refresh();
 			caller.Reply("RPG stats reset");
 		}
 	}

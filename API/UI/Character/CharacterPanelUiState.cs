@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using AARPG.Core.Mechanics;
 using AARPG.Core.Players;
 using Terraria;
@@ -13,6 +12,8 @@ public class CharacterPanelUiState : UIState
 	public bool visible = false;
 	private bool addedLevels;
 	private bool addedExperience;
+	private bool addedPerkPoints;
+	private bool addedRefundPoints;
 
 	public override void OnInitialize() {
 
@@ -50,6 +51,32 @@ public class CharacterPanelUiState : UIState
 		panel.viewArea.Append(levelText);
 		addedExperience = true;
 	}
+
+	public void AddPerkPointsText() {
+		var playerStats = GetPlayerStats();
+		if (playerStats == null || addedPerkPoints) {
+			return;
+		}
+
+		var levelText = new UIText($"Perk Points: {playerStats.stats.refundPoints}", 0.9f) {
+			MarginTop = 40
+		};
+		panel.viewArea.Append(levelText);
+		addedPerkPoints = true;
+	}
+	
+	public void AddRefundPointsText() {
+		var playerStats = GetPlayerStats();
+		if (playerStats == null || addedRefundPoints) {
+			return;
+		}
+
+		var levelText = new UIText($"Refund Points: {playerStats.stats.refundPoints}", 0.9f) {
+			MarginTop = 60
+		};
+		panel.viewArea.Append(levelText);
+		addedRefundPoints = true;
+	}
 	
 	private StatPlayer GetPlayerStats() {
 		var player = Main.LocalPlayer;
@@ -60,5 +87,7 @@ public class CharacterPanelUiState : UIState
 		panel.viewArea.RemoveAllChildren();
 		addedLevels = false;
 		addedExperience = false;
+		addedRefundPoints = false;
+		addedPerkPoints = false;
 	}
 }
