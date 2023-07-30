@@ -94,17 +94,24 @@ namespace AARPG.Core.Systems{
 				if (database == null) goto disposeStreams;
 				
 				if (database.Defaults != null) {
-					foreach(var defaultEntry in database.Defaults) {
-						if (defaults.TryGetValue(defaultEntry.Name, out NPCStatisticsDatabaseEntryJSON value)) {
+					foreach(var defaultEntry in database.Defaults) {  //Registers all defaults in configuration
+						if (defaults.TryGetValue(defaultEntry.Name, out NPCStatisticsDatabaseEntryJSON defaultValue)) {
 							Func<short, bool> requirement = null;
-							if(value.RequirementKeys is not null)
-								requirement = CreateProgressionFunction(value.RequirementKeys);
-							CreateEntry(id, defaultEntry.Name, value.Weight, value.Stats, requirement);
+							if(defaultValue.RequirementKeys is not null)
+								requirement = CreateProgressionFunction(defaultValue.RequirementKeys);
+							CreateEntry(id, defaultEntry.Name, defaultValue.Weight, defaultValue.Stats, requirement);
 						}
 					}	
 				}
 
-				foreach(var entry in database.Database){
+				if (defaults.TryGetValue("Base", out NPCStatisticsDatabaseEntryJSON value)) { //Registers all creatures bases that have json files
+					Func<short, bool> requirement = null;
+					if(value.RequirementKeys is not null)
+						requirement = CreateProgressionFunction(value.RequirementKeys);
+					CreateEntry(id, null, 5.0f, value.Stats, requirement);
+				}
+
+				foreach(var entry in database.Database){ //Registers all manual entries
 					Func<short, bool> requirement = null;
 					if(entry.RequirementKeys is not null)
 						requirement = CreateProgressionFunction(entry.RequirementKeys);
