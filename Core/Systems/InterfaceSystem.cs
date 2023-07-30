@@ -55,9 +55,8 @@ namespace AARPG.Core.Systems {
 			int idx = layers.FindIndex(layer => layer.Name == "Vanilla: Mouse Text");
 			if (idx >= 0) {
 				layers.Insert(idx + 1, new LegacyGameInterfaceLayer("AARPG: Debug NPC Stats", DrawDebugNpcUi, InterfaceScaleType.UI));
+				layers.Insert(idx + 1, new LegacyGameInterfaceLayer("Character Panel", DrawCharacterUi, InterfaceScaleType.UI));
 			}
-
-			layers.Add(new LegacyGameInterfaceLayer("Character Panel", DrawCharacterUi, InterfaceScaleType.UI));
 		}
 
 		private bool DrawDebugNpcUi() {
