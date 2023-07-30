@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AARPG.Core.Utility;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -31,9 +32,28 @@ namespace AARPG.Core.Systems{
 			using Stream pathsStream = CoreMod.Instance.GetFileStream("Data/paths.txt");
 			using StreamReader pathsReader = new StreamReader(pathsStream);
 			string[] paths = pathsReader.ReadToEnd().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
-
+			
 			pathsReader.Dispose();
 			pathsStream.Dispose();
+			
+			using Stream defaultPathsStream = CoreMod.Instance.GetFileStream("Data/defaultPaths.txt");
+			using StreamReader defaultPathsReader = new StreamReader(defaultPathsStream);
+			string[] defaultPaths = defaultPathsReader.ReadToEnd().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+			var defaults = new Dictionary<string, NPCStatisticsDatabaseEntryJSON>();
+
+			defaultPathsStream.Dispose();
+			defaultPathsReader.Dispose();
+
+			foreach (var defaultPath in defaultPaths) {
+				Stream jsonStream = CoreMod.Instance.GetFileStream("Data/" + defaultPath);
+				StreamReader jsonReader = new StreamReader(jsonStream);
+				string json = jsonReader.ReadToEnd();
+				int nameIDStart = defaultPath.IndexOf('/');
+				string thingName = Path.ChangeExtension(defaultPath[(nameIDStart + 1)..], null);
+				defaults.Add(thingName, JsonConvert.DeserializeObject<NPCStatisticsDatabaseEntryJSON>(json, JsonUtils.GetDeserializationSettings()));
+				jsonReader.Dispose();
+				jsonStream.Dispose();
+			}
 
 			foreach(var path in paths){
 				Stream jsonStream = CoreMod.Instance.GetFileStream("Data/" + path);
@@ -70,12 +90,19 @@ namespace AARPG.Core.Systems{
 					goto disposeStreams;
 				}
 
-				NPCStatisticsDatabaseJSON database = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(json, new JsonSerializerSettings(){
-					MissingMemberHandling = MissingMemberHandling.Ignore,
-					ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
-					FloatFormatHandling = FloatFormatHandling.DefaultValue,
-					PreserveReferencesHandling = PreserveReferencesHandling.All
-				});
+				NPCStatisticsDatabaseJSON database = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(json, JsonUtils.GetDeserializationSettings());
+				if (database == null) goto disposeStreams;
+				
+				if (database.Defaults != null) {
+					foreach(var defaultEntry in database.Defaults) {
+						if (defaults.TryGetValue(defaultEntry.Name, out NPCStatisticsDatabaseEntryJSON value)) {
+							Func<short, bool> requirement = null;
+							if(value.RequirementKeys is not null)
+								requirement = CreateProgressionFunction(value.RequirementKeys);
+							CreateEntry(id, defaultEntry.Name, value.Weight, value.Stats, requirement);
+						}
+					}	
+				}
 
 				foreach(var entry in database.Database){
 					Func<short, bool> requirement = null;
@@ -148,10 +175,7 @@ disposeStreams:
 					id = (short)m.Type;
 
 				if(File.Exists(fullPath)){
-					json = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(File.ReadAllText(fullPath), new JsonSerializerSettings(){
-						MissingMemberHandling = MissingMemberHandling.Ignore,
-						DefaultValueHandling = DefaultValueHandling.Populate
-					});
+					json = JsonConvert.DeserializeObject<NPCStatisticsDatabaseJSON>(File.ReadAllText(fullPath), JsonUtils.GetSerializationSettings());
 
 					files.Add(file + ".json");
 				}else if((isVanillaID || isModdedID) && progressionDict.TryGetValue((short)id, out var progressions)){
@@ -171,10 +195,7 @@ disposeStreams:
 					if(json.Database.Count > 0){
 						//Create the file in the project
 						using(StreamWriter writer = new StreamWriter(File.Open(fullPath, FileMode.CreateNew)))
-							writer.Write(JsonConvert.SerializeObject(json, Formatting.Indented, new JsonSerializerSettings(){
-								MissingMemberHandling = MissingMemberHandling.Ignore,
-								DefaultValueHandling = DefaultValueHandling.Populate
-							}));
+							writer.Write(JsonConvert.SerializeObject(json, Formatting.Indented, JsonUtils.GetSerializationSettings()));
 
 						files.Add(file + ".json");
 

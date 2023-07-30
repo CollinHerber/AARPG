@@ -2,7 +2,6 @@
 using AARPG.Core.Mechanics;
 using AARPG.Core.Players;
 using AARPG.Core.Systems;
-using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -42,12 +41,12 @@ namespace AARPG.Core.NPCs{
 			if(API.Edits.Detours.Vanilla.TransformingNPC && NPCProgressionRegistry.TransformingNPCs.Contains(netID)){
 				//Transforming NPCs should carry the stats
 				stats = API.Edits.Detours.Vanilla.PreTransformStats;
-			}else if(NPCProgressionRegistry.NonSeparableWormNPCToHead.TryGetValue(netID, out _)){
+			} else if(NPCProgressionRegistry.NonSeparableWormNPCToHead.TryGetValue(netID, out _)) {
 				//Use the stats from the head NPC, unless this NPC isn't being spawned by the head
 				//Indicate that the NPC needs stats, but getting them should be delayed
 				DelayedStatAssignment = true;
 				return;
-			}else{
+			} else {
 				NPCStatisticsRegistry.Entry entry = NPCStatisticsRegistry.GetRandomStats(netID);
                 //--NEEDS LOOKING--//
 				//-- Entry was null on 1.4.3 loading which threw null reference --//
@@ -136,8 +135,9 @@ namespace AARPG.Core.NPCs{
 			return Math.Max(1, (int)(damage * (1f - Math.Min(0.9999f, endurance))));	
 		}
 		
-		public override void OnKill(NPC npc){
-			if(npc.TryGetGlobalNPC<StatNPC>(out var statNPC) && statNPC.stats is not null && !npc.SpawnedFromStatue){
+		public override void OnKill(NPC npc) {
+			npc.TryGetGlobalNPC<StatNPC>(out var statNPC);
+			if(statNPC.stats is not null && !npc.SpawnedFromStatue){
 				for(int i = 0; i < Main.maxPlayers; i++){
 					Player player = Main.player[i];
 

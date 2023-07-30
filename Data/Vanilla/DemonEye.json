@@ -1,3 +1,11 @@
 {
-  "entries": []
+    "defaults": [
+        {
+            "name": "Tiny"
+        },
+        {
+            "name": "Bulky"
+        }
+    ],
+    "entries": []
 }

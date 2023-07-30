@@ -34,6 +34,10 @@ namespace AARPG.Core.Utility{
 					return DamageClass.Throwing;
 				if(type == DamageClass.MeleeNoSpeed.Name)
 					return DamageClass.MeleeNoSpeed;
+				if(type == DamageClass.SummonMeleeSpeed.Name)
+					return DamageClass.SummonMeleeSpeed;
+				if(type == DamageClass.MagicSummonHybrid.Name)
+					return DamageClass.MagicSummonHybrid;
 
 				throw new ArgumentException($"Invalid damage class detected ({mod}:{type})");
 			}else if(ModLoader.TryGetMod(mod, out Mod inst)){

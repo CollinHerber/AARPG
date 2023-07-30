@@ -9,5 +9,8 @@ namespace AARPG.Core.JSON{
 		[DataMember(Name = "entries")]
 		[DefaultValue(null)]
 		public IList<NPCStatisticsDatabaseEntryJSON> Database{ get; set; }
+		[DataMember(Name = "defaults")]
+		[DefaultValue(null)]
+		public IList<NPCStatisticsDefault> Defaults { get; set; }
 	}
 }
