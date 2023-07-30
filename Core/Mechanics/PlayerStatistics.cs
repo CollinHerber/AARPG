@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using AARPG.Core.Systems;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -110,6 +111,8 @@ namespace AARPG.Core.Mechanics{
 
 				MiscUtils.SendMessage($"Player \"{statsOwner.name}\" has reached Lv. {level}!");
 			}
+			
+			InterfaceSystem.characterPanel.Refresh();
 		}
 
 		private void ApplyGenericLevelUpBoosts(){

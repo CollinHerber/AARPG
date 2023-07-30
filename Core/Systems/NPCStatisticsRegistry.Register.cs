@@ -67,10 +67,7 @@ namespace AARPG.Core.Systems{
 				}
 
 				string source = path[..nameIDStart];
-				
-				nameIDStart++;
-
-				string thingName = Path.ChangeExtension(path[nameIDStart..], null);
+				string thingName = Path.ChangeExtension(path[(nameIDStart + 1)..], null);
 
 				int id;
 				if(source == "Vanilla"){
