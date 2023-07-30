@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using AARPG.Core.Mechanics;
 using AARPG.Core.Players;
 using Terraria;
@@ -16,6 +17,9 @@ public class CharacterPanelUiState : UIState
 	public override void OnInitialize() {
 
 		panel = new UIDragablePanel("Character Information");
+		panel.OnMenuClose += () => {
+			visible = false;
+		};
 		panel.Left.Set(800, 0);
 		panel.Top.Set(100, 0);
 		panel.Width.Set(280, 0);
@@ -23,7 +27,7 @@ public class CharacterPanelUiState : UIState
 
 		Append(panel);
 	}
-
+	
 	public void AddLevelText() {
 		var playerStats = GetPlayerStats();
 		if (playerStats == null || addedLevels) {
