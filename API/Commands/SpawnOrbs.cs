@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 
-namespace AARPG.API.Commands{
+namespace AARPG.API.Commands {
 	[Autoload(!CoreMod.Release)]
 	public class SpawnOrbs : ModCommand{
 		public override string Command => "orb";

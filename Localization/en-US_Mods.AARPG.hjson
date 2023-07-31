@@ -1,1 +1,4 @@
-Keybinds.OpenCharacterUi.DisplayName: Open Character Ui
+Keybinds: {
+	OpenCharacterUi.DisplayName: Open Character Ui
+	OpenPerkUi.DisplayName: Open Perk Ui
+}

@@ -3,10 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using AARPG.API.UI.Character;
-using AARPG.Core.Mechanics;
-using AARPG.Core.Players;
 using Terraria;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -20,6 +17,7 @@ namespace AARPG.Core.Systems {
 		internal static NPCStatsState debugNPCStats;
 		public static UserInterface uiInterface;
 		public static CharacterPanelUiState characterPanel;
+		public static PerkUiState perkPanel;
 
 		public static void LoadStatic() {
 			if (Main.dedServ)
@@ -29,7 +27,9 @@ namespace AARPG.Core.Systems {
 			debugNPCStats = new();
 			characterPanel = new();
 			characterPanel.Initialize();
-
+			perkPanel = new();
+			perkPanel.Initialize();
+			
 			uiInterface.SetState(debugNPCStats);
 			debugNPCStats.Activate();
 		}
@@ -49,6 +49,9 @@ namespace AARPG.Core.Systems {
 			if (!Main.gameMenu && characterPanel.visible) {
 				uiInterface?.Update(gameTime);
 			}
+			if (!Main.gameMenu && perkPanel.visible) {
+				uiInterface?.Update(gameTime);
+			}
 		}
 
 		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
@@ -56,6 +59,7 @@ namespace AARPG.Core.Systems {
 			if (idx >= 0) {
 				layers.Insert(idx + 1, new LegacyGameInterfaceLayer("AARPG: Debug NPC Stats", DrawDebugNpcUi, InterfaceScaleType.UI));
 				layers.Insert(idx + 1, new LegacyGameInterfaceLayer("Character Panel", DrawCharacterUi, InterfaceScaleType.UI));
+				layers.Insert(idx + 1, new LegacyGameInterfaceLayer("Perk Panel", DrawPerkUi, InterfaceScaleType.UI));
 			}
 		}
 
@@ -72,6 +76,15 @@ namespace AARPG.Core.Systems {
 				characterPanel.AddExperienceText();
 				characterPanel.AddPerkPointsText();
 				characterPanel.AddRefundPointsText();
+				uiInterface.Draw(Main.spriteBatch, new GameTime());	
+			}
+
+			return true;
+		}
+		
+		private bool DrawPerkUi() {
+			if (!Main.gameMenu && perkPanel.visible) {
+				perkPanel.DrawPerks();
 				uiInterface.Draw(Main.spriteBatch, new GameTime());	
 			}
 

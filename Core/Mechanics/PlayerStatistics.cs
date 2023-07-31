@@ -14,12 +14,12 @@ namespace AARPG.Core.Mechanics{
 	/// An object representing the statistics for the player
 	/// </summary>
 	public class PlayerStatistics : Statistics{
-		public struct ModifierData{
+		public struct ModifierData {
 			public Modifier modifier;
 			public int crit;
 		}
 
-		private struct UnloadedDamageClass{
+		private struct UnloadedDamageClass {
 			public string mod;
 			public string name;
 
